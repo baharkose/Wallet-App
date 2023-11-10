@@ -10,6 +10,7 @@ let yourSaving = document.querySelector("#kalan")
 const spendBody  = document.querySelector("#harcama-body")
 const clearBtn  = document.querySelector("#temizle-btn")
 const result  = document.querySelector(".result")
+let span = document.querySelector(".span")
 
 let incomeT = 0;
 
@@ -35,6 +36,7 @@ let a = income.value
         calculateSpend(incomeT)
         console.log("is clicked");
         console.log(yourIncome.textContent);
+        localStorage.setItem("gelirler", gelirler)
     }
     
 
@@ -103,13 +105,14 @@ const calculateSpend = (incomeT)=>{
     let totalSavedMoney = incomeT - sumAll;
         yourSaving.textContent = totalSavedMoney;
         
-        let span = result.createElement("span")
-        result.appendChild(span);
-        span.className = "bg-danger"
+       
+        
+    let newDate = new Date().getFullYear()
+    console.log(newDate);
 
-
-    span.textContent = ` ${date.value}`
-    result.textContent= ` tarihli toplam birikim tutarınız ${totalSavedMoney}'dir. `;
+    let spanValue = span.textContent = newDate;
+    
+    result.innerHTML = `<span class="bg-danger fw-bold">${spanValue} </span>tarihli toplam birikim tutarınız<span class="bg-danger fw-bold"> ${totalSavedMoney} </span>'dir. `
 
     return yourSaving.textContent;
     }
