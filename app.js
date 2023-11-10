@@ -14,6 +14,16 @@ const result  = document.querySelector(".result")
 let incomeT = 0;
 
 
+//!=========== events ============
+
+// form etiketi kullanmak istiyorsak eğer
+
+// ekleBtn.addEventListener("submit", (e)=>{
+//     // click değil submit dinlenir
+//     e.preventDefault()
+//     // sayfayı yenileme
+// })
+
 
 addBtn.addEventListener("click",()=>{
 let a = income.value
