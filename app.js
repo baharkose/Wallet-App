@@ -25,18 +25,11 @@ let paymentForm = 0
 
 //!=========== events ============
 
-// form etiketi kullanmak istiyorsak eğer
 
-// ekleBtn.addEventListener("submit", (e)=>{
-//     // click değil submit dinlenir
-//     e.preventDefault()
-//     // sayfayı yenileme
-// })
 
 //  Ekle butonuna basıldığında yapılacaklar...
 
 addBtn.addEventListener("click",()=>{
-
 
 // gelirleri local storage da depolamak için alan oluşturuldu.
 
@@ -57,13 +50,9 @@ let a = income.value
 
        
 
-        
 
         
     }
-    
-    
-    // a.preventDefault();
     
 
 })
@@ -102,6 +91,7 @@ saveBtn.addEventListener("click", ()=>{
     tdTrash.appendChild(trashI)
 
 
+    // çöpe tıklandığında satırı sil.
 
     trashI.addEventListener("click", ()=>{
         console.log("is clicked");
@@ -112,16 +102,21 @@ saveBtn.addEventListener("click", ()=>{
    
     trNew.appendChild(tdTrash, trNew)
 
+    // kaydet butonunu basınca hesaplama fonksiyonunu aktifleştir.
+
     calculateSpend(incomeT)
 
     // <i class="fa-solid fa-trash"></i>
 
+    // Local storage'da verileri depolamak için harcama listesinden gelen verileri liste halinde depola.
     harcamaListesi = [date.value,spendArea.value,  quantity.value]
 
     //! atarken JSON stringfy alırken JSON parse
 
     // JSON stringfy arramış gibi veriyi gömer.
     // harcama listesini local strorage e ekle.
+    // alıdığın verileri liste halinde JSON.stringfy ile sakla.
+
     localStorage.setItem("harcamaListesi", JSON.stringify(harcamaListesi) )
 
    return trNew;
@@ -129,37 +124,46 @@ saveBtn.addEventListener("click", ()=>{
 })
 
 
+// hesaplama işlemi
 
 const calculateSpend = (incomeT)=>{
+
+    // gelen spendBody'den gelen NodeList verileri öncelikle ayır. 
 
     // incomeT = 0;
     console.log(incomeT);
     let sumQuantity = 0;
     let allQuantity =  [...spendBody.querySelectorAll(".quantityN")]
 
-  
+    // ayırdığın verileri sayılara çevir ve hepsini topla.
+
     let sumAll = allQuantity.reduce((sum, item)=>sum + Number(item.textContent), 0);
     console.log(sumAll);
  
+    // ekranda yazdır.
     yourSpend.textContent = sumAll;
+
+    //  gelirden gideri çıkar.
 
     let totalSavedMoney = incomeT - sumAll;
         yourSaving.textContent = totalSavedMoney;
         
-       
-        
+
+
+    // bugün itibariyle birikimi yazdır. 
     let newDate = new Date().getFullYear()
     console.log(newDate);
 
     let spanValue = span.textContent = newDate;
     
+    //  ekranda süs
     result.innerHTML = `<span class="bg-danger fw-bold">${spanValue} </span>tarihli toplam birikim tutarınız<span class="bg-danger fw-bold"> ${totalSavedMoney} </span>'dir. `
 
     return yourSaving.textContent;
     }
 
     
-    
+    // temizleye basınca her şeyi sfırlar.
     // console.log(allQuantity);
     clearBtn.addEventListener("click", ()=>{
     income.value = "";
@@ -170,6 +174,9 @@ const calculateSpend = (incomeT)=>{
     quantity.value = "";
     yourSaving.textContent = ""
 
+    // localStorage sıfırla
+    // her şeyi siler
+    localstroge.clear();
 
 });
 
