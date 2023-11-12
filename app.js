@@ -94,12 +94,15 @@ saveBtn.addEventListener("click", ()=>{
     // çöpe tıklandığında satırı sil.
 
     trashI.addEventListener("click", ()=>{
+
+
         console.log("is clicked");
         trashI.closest(".trNew").remove();
         calculateSpend(trNew);
-        // trashI.closest(".trNew").tdQuantity.textContent = "";
-    })
+
+});
    
+
     trNew.appendChild(tdTrash, trNew)
 
     // kaydet butonunu basınca hesaplama fonksiyonunu aktifleştir.
@@ -109,11 +112,20 @@ saveBtn.addEventListener("click", ()=>{
     // <i class="fa-solid fa-trash"></i>
 
     // Local storage'da verileri depolamak için harcama listesinden gelen verileri liste halinde depola.
-    harcamaListesi = [date.value,spendArea.value,  quantity.value]
+
+    const newHarcama = {
+        tarih: date.value,
+        haracamaAlani: spendArea.value,
+        miktar: quantity.value
+    }
+
+    
+   
+    harcamaListesi.push(newHarcama) 
 
     //! atarken JSON stringfy alırken JSON parse
 
-    // JSON stringfy arramış gibi veriyi gömer.
+    // JSON stringfy arraymış gibi veriyi gömer.
     // harcama listesini local strorage e ekle.
     // alıdığın verileri liste halinde JSON.stringfy ile sakla.
 
@@ -121,7 +133,7 @@ saveBtn.addEventListener("click", ()=>{
 
    return trNew;
   
-})
+});
 
 
 // hesaplama işlemi
@@ -166,7 +178,7 @@ const calculateSpend = (incomeT)=>{
     // temizleye basınca her şeyi sfırlar.
     // console.log(allQuantity);
     clearBtn.addEventListener("click", ()=>{
-    // trNew.remove();
+  
     income.value = "0";
     yourSpend.textContent = "0"
     yourIncome.textContent = "0"
@@ -189,57 +201,86 @@ const calculateSpend = (incomeT)=>{
 window.onload = function() {
 
      // sonra onu al ve göster
-     goster = localStorage.getItem("gelirler")
-     console.log(goster);
-     yourIncome.textContent = goster;
+     incomeT = localStorage.getItem("gelirler")
+     
+     console.log(incomeT);
+     yourIncome.textContent = incomeT;
+
+
 
 
       // harcama listesini şimdi al ve göster
       // aldığın listeyi liste formatında dışarı çıkar.
 
-    let goster2 = JSON.parse(localStorage.getItem("harcamaListesi"))
-    console.log(goster2);
+    harcamaListesi = JSON.parse(localStorage.getItem("harcamaListesi"))
+    console.log(harcamaListesi);
     
-
-    // listenin elemanlarını tek tek oluşturduğun satırlara yaz.
+    harcamaListesi.forEach(item=>{
+             // listenin elemanlarını tek tek oluşturduğun satırlara yaz.
     let tr = document.createElement("tr")
 
-    let trNew = spendBody.appendChild(tr)
-    trNew.className = "trNew"
+    // let trNew = spendBody.appendChild(tr) // tek işlem olarak algıladı
+    tr.className = "trNew"
 
     let tdDate = document.createElement("td")
-    tdDate.textContent = goster2[0]
-    trNew.appendChild(tdDate)
+    tdDate.textContent = item.tarih
+    tr.appendChild(tdDate)
 
     let tdSpend = document.createElement("td")
-    tdSpend.textContent = goster2[1]
-    trNew.appendChild(tdSpend)
+    tdSpend.textContent = item.haracamaAlani
+    tr.appendChild(tdSpend)
 
     let tdQuantity = document.createElement("td")
-    tdQuantity.textContent = goster2[2]
+    tdQuantity.textContent = item.miktar
     tdQuantity.className = "quantityN"
-    trNew.appendChild(tdQuantity)
+    tr.appendChild(tdQuantity)
 
     let tdTrash = document.createElement("td")
-    trNew.appendChild(tdTrash)
+    tr.appendChild(tdTrash)
     let trashI = document.createElement("i")
     console.log(trashI); 
     trashI.className="fa-solid";
     trashI.className+=" fa-trash";
     trashI.style.cursor = "pointer";
     tdTrash.appendChild(trashI)
+    spendBody.appendChild(tr)
+
 
     trashI.addEventListener("click", ()=>{
         console.log("is clicked");
         trashI.closest(".trNew").remove();
-        calculateSpend(trNew);
+        // calculateSpend(trNew);
+
+      
+       // Identify the clicked row and remove it from the table
+       let selectedRow = trashI.closest(".trNew");
+       selectedRow.remove();
+
+       // Identify the index of the clicked item in the harcamaListesi array
+       let selectedIndex = harcamaListesi.findIndex(item => item.tarih === tdDate.textContent);
+
+       // Remove the item from the harcamaListesi array
+       if (selectedIndex !== -1) {
+           harcamaListesi.splice(selectedIndex, 1);
+
+           // Update local storage with the modified array
+          let aaa=  localStorage.setItem("harcamaListesi", JSON.stringify(harcamaListesi));
+            console.log(aaa);
+    //    localStorage.removeItem('2')
+        // trashI.closest(".trNew").tdQuantity.textContent = "";
+    }
+
+
         // trashI.closest(".trNew").tdQuantity.textContent = "";
     })
 
-    yourSpend.textContent = goster2[2]
+        
+
+        
+    })
     calculateSpend(incomeT)
+    
 
+    
 
-   
 }
-
