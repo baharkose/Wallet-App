@@ -174,6 +174,8 @@ const calculateSpend = (incomeT)=>{
 });
 
 
+// sayfa yenilendiğinde local storagedan verileri çekme
+
 
 window.onload = function() {
 
@@ -184,9 +186,13 @@ window.onload = function() {
 
 
       // harcama listesini şimdi al ve göster
+      // aldığın listeyi liste formatında dışarı çıkar.
+
     let goster2 = JSON.parse(localStorage.getItem("harcamaListesi"))
     console.log(goster2);
     
+
+    // listenin elemanlarını tek tek oluşturduğun satırlara yaz.
     let tr = document.createElement("tr")
 
     let trNew = spendBody.appendChild(tr)
@@ -225,12 +231,6 @@ window.onload = function() {
     calculateSpend(incomeT)
 
 
-
-
-
-
-
-    // trNew.innerHTML = `<td>goster2[0]</td><td>goster2[1]</td><td>goster[2]</td><td><i class="fa-solid fa-trash></td>`
    
 }
 
