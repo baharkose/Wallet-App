@@ -35,28 +35,26 @@ addBtn.addEventListener("click",()=>{
 
 localStorage.setItem("gelirler", "a")
 
-let a = income.value
-    if(isNaN(a)){
-        alert("Please enter a valid income")
-        
-    }
-    else{incomeT = yourIncome.textContent = income.value;
-        calculateSpend(incomeT)
-        console.log("is clicked");
-        console.log(yourIncome.textContent);
+        let a = income.value
+            if(isNaN(a)){
+                alert("Please enter a valid income")
+                
+            }
+            else{
 
-        // storagetaki gelirleri income.value yap
-        localStorage.setItem("gelirler", a)
+                incomeT = yourIncome.textContent = income.value;
+                calculateSpend(incomeT)
+                console.log("is clicked");
+                console.log(yourIncome.textContent);
 
-       
+                // storagetaki gelirleri income.value yap
+                localStorage.setItem("gelirler", a)
 
+                
+            }
+            
 
-        
-    }
-    
-
-})
-
+});
 
 
 // local stroga'da harcama formunu tutmak için verileri saklama amaçlı bir dizi tanımlandı
@@ -98,7 +96,7 @@ saveBtn.addEventListener("click", ()=>{
 
         console.log("is clicked");
         trashI.closest(".trNew").remove();
-        calculateSpend(trNew);
+        calculateSpend(incomeT);
 
 });
    
