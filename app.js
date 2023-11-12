@@ -18,11 +18,6 @@ let incomeT = 0;
 let paymentForm = 0
 
 
-
-
-
-
-
 //  Ekle butonuna basıldığında yapılacaklar...
 
 addBtn.addEventListener("click",()=>{
@@ -46,17 +41,12 @@ localStorage.setItem("gelirler", "a")
                 // storagetaki gelirleri income.value yap
                 localStorage.setItem("gelirler", a)
 
-                
-            }
-            
+            }       
 
 });
 
-
 // local stroga'da harcama formunu tutmak için verileri saklama amaçlı bir dizi tanımlandı
-
 let harcamaListesi = [] 
-
 
 saveBtn.addEventListener("click", ()=>{
     let tr = document.createElement("tr")
@@ -84,7 +74,6 @@ saveBtn.addEventListener("click", ()=>{
     trashI.style.cursor = "pointer";
     tdTrash.appendChild(trashI)
 
-
     // çöpe tıklandığında satırı sil.
 
     trashI.addEventListener("click", ()=>{
@@ -94,14 +83,12 @@ saveBtn.addEventListener("click", ()=>{
         calculateSpend(incomeT);
 
 });
-   
     trNew.appendChild(tdTrash, trNew)
 
     // kaydet butonunu basınca hesaplama fonksiyonunu aktifleştir.
     calculateSpend(incomeT)
 
     // Local storage'da verileri depolamak için harcama listesinden gelen verileri liste halinde depola.
-
     const newHarcama = {
             tarih: date.value,
             haracamaAlani: spendArea.value,
@@ -179,9 +166,7 @@ const calculateSpend = (incomeT)=>{
 
     });
 
-
     // sayfa yenilendiğinde local storagedan verileri çekme
-
     window.onload = function() {
 
         // sonra onu al ve göster
