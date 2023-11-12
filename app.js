@@ -1,6 +1,5 @@
 //  Değişkenler Alındı
 
-
 const income = document.querySelector("#gelir-input")
 const spendArea = document.querySelector("#harcama-alani")
 const date = document.querySelector("#tarih")
@@ -21,9 +20,6 @@ let paymentForm = 0
 
 
 
-
-
-//!=========== events ============
 
 
 
@@ -93,32 +89,25 @@ saveBtn.addEventListener("click", ()=>{
 
     trashI.addEventListener("click", ()=>{
 
-
         console.log("is clicked");
         trashI.closest(".trNew").remove();
         calculateSpend(incomeT);
 
 });
    
-
     trNew.appendChild(tdTrash, trNew)
 
     // kaydet butonunu basınca hesaplama fonksiyonunu aktifleştir.
-
     calculateSpend(incomeT)
-
-    // <i class="fa-solid fa-trash"></i>
 
     // Local storage'da verileri depolamak için harcama listesinden gelen verileri liste halinde depola.
 
     const newHarcama = {
-        tarih: date.value,
-        haracamaAlani: spendArea.value,
-        miktar: quantity.value
+            tarih: date.value,
+            haracamaAlani: spendArea.value,
+            miktar: quantity.value
     }
 
-    
-   
     harcamaListesi.push(newHarcama) 
 
     //! atarken JSON stringfy alırken JSON parse
@@ -129,156 +118,141 @@ saveBtn.addEventListener("click", ()=>{
 
     localStorage.setItem("harcamaListesi", JSON.stringify(harcamaListesi) )
 
-   return trNew;
+    return trNew;
   
 });
-
 
 // hesaplama işlemi
 
 const calculateSpend = (incomeT)=>{
 
-    // gelen spendBody'den gelen NodeList verileri öncelikle ayır. 
+                // gelen spendBody'den gelen NodeList verileri öncelikle ayır. 
 
-    // incomeT = 0;
-    console.log(incomeT);
-    let sumQuantity = 0;
-    let allQuantity =  [...spendBody.querySelectorAll(".quantityN")]
+                console.log(incomeT);
+               
+                let allQuantity =  [...spendBody.querySelectorAll(".quantityN")]
 
-    // ayırdığın verileri sayılara çevir ve hepsini topla.
+                // ayırdığın verileri sayılara çevir ve hepsini topla.
 
-    let sumAll = allQuantity.reduce((sum, item)=>sum + Number(item.textContent), 0);
-    console.log(sumAll);
- 
-    // ekranda yazdır.
-    yourSpend.textContent = sumAll;
+                let sumAll = allQuantity.reduce((sum, item)=>sum + Number(item.textContent), 0);
+                console.log(sumAll);
+            
+                // ekranda yazdır.
+                yourSpend.textContent = sumAll;
 
-    //  gelirden gideri çıkar.
+                //  gelirden gideri çıkar.
 
-    let totalSavedMoney = incomeT - sumAll;
-        yourSaving.textContent = totalSavedMoney;
+                let totalSavedMoney = incomeT - sumAll;
+                    yourSaving.textContent = totalSavedMoney;
+                    
+
+                // bugün itibariyle birikimi yazdır. 
+                let newDate = new Date().getFullYear()
+                console.log(newDate);
+
+                let spanValue = span.textContent = newDate;
+                
+                //  ekranda süs
+                result.innerHTML = `<span class="bg-danger fw-bold">${spanValue} </span>tarihli toplam birikim tutarınız<span class="bg-danger fw-bold"> ${totalSavedMoney} </span>'dir. `
+
+                return yourSaving.textContent;
+
+                }
+
+                
+                // temizleye basınca her şeyi sfırlar.
+                // console.log(allQuantity);
+                clearBtn.addEventListener("click", ()=>{
+            
+                        income.value = "0";
+                        yourSpend.textContent = "0"
+                        yourIncome.textContent = "0"
+                        spendArea.value = "0";
+                        date.value = "0"; //
+                        quantity.value = "0";
+                        yourSaving.textContent = "0"
+
+                        // localStorage sıfırla
+                        // her şeyi siler
+                        localStorage.clear();
+                        window.location.reload()
+
+    });
+
+
+    // sayfa yenilendiğinde local storagedan verileri çekme
+
+    window.onload = function() {
+
+        // sonra onu al ve göster
+        incomeT = localStorage.getItem("gelirler")
+        
+        console.log(incomeT);
+        yourIncome.textContent = incomeT;
+
+        // harcama listesini şimdi al ve göster
+        // aldığın listeyi liste formatında dışarı çıkar.
+
+        harcamaListesi = JSON.parse(localStorage.getItem("harcamaListesi"))
+        console.log(harcamaListesi);
+        
+        harcamaListesi.forEach(item=>{
+                // listenin elemanlarını tek tek oluşturduğun satırlara yaz.
+                let tr = document.createElement("tr")
+
+                // let trNew = spendBody.appendChild(tr) // tek işlem olarak algıladı
+                tr.className = "trNew"
+
+                let tdDate = document.createElement("td")
+                tdDate.textContent = item.tarih
+                tr.appendChild(tdDate)
+
+                let tdSpend = document.createElement("td")
+                tdSpend.textContent = item.haracamaAlani
+                tr.appendChild(tdSpend)
+
+                let tdQuantity = document.createElement("td")
+                tdQuantity.textContent = item.miktar
+                tdQuantity.className = "quantityN"
+                tr.appendChild(tdQuantity)
+
+                let tdTrash = document.createElement("td")
+                tr.appendChild(tdTrash)
+                let trashI = document.createElement("i")
+                console.log(trashI); 
+                trashI.className="fa-solid";
+                trashI.className+=" fa-trash";
+                trashI.style.cursor = "pointer";
+                tdTrash.appendChild(trashI)
+                spendBody.appendChild(tr)
+
+
+                trashI.addEventListener("click", ()=>{
+                    console.log("is clicked");
+                    trashI.closest(".trNew").remove();
+                
+                    // Identify the clicked row and remove it from the table
+                    let selectedRow = trashI.closest(".trNew");
+                    selectedRow.remove();
+
+                    // Identify the index of the clicked item in the harcamaListesi array
+                    let selectedIndex = harcamaListesi.findIndex(item => item.tarih === tdDate.textContent);
+
+                    // Remove the item from the harcamaListesi array
+                    if (selectedIndex !== -1) {
+                        harcamaListesi.splice(selectedIndex, 1);
+
+                        // Update local storage with the modified array
+                        let aaa=  localStorage.setItem("harcamaListesi", JSON.stringify(harcamaListesi));
+                            console.log(aaa);
+
+                    }
+
+                });
+   
+        });
+
+            calculateSpend(incomeT)
         
 
-
-    // bugün itibariyle birikimi yazdır. 
-    let newDate = new Date().getFullYear()
-    console.log(newDate);
-
-    let spanValue = span.textContent = newDate;
-    
-    //  ekranda süs
-    result.innerHTML = `<span class="bg-danger fw-bold">${spanValue} </span>tarihli toplam birikim tutarınız<span class="bg-danger fw-bold"> ${totalSavedMoney} </span>'dir. `
-
-    return yourSaving.textContent;
     }
-
-    
-    // temizleye basınca her şeyi sfırlar.
-    // console.log(allQuantity);
-    clearBtn.addEventListener("click", ()=>{
-  
-    income.value = "0";
-    yourSpend.textContent = "0"
-    yourIncome.textContent = "0"
-    spendArea.value = "0";
-    date.value = "0"; //
-    quantity.value = "0";
-    yourSaving.textContent = "0"
-
-    // localStorage sıfırla
-    // her şeyi siler
-    localStorage.clear();
-    window.location.reload()
-
-});
-
-
-// sayfa yenilendiğinde local storagedan verileri çekme
-
-
-window.onload = function() {
-
-     // sonra onu al ve göster
-     incomeT = localStorage.getItem("gelirler")
-     
-     console.log(incomeT);
-     yourIncome.textContent = incomeT;
-
-
-
-
-      // harcama listesini şimdi al ve göster
-      // aldığın listeyi liste formatında dışarı çıkar.
-
-    harcamaListesi = JSON.parse(localStorage.getItem("harcamaListesi"))
-    console.log(harcamaListesi);
-    
-    harcamaListesi.forEach(item=>{
-             // listenin elemanlarını tek tek oluşturduğun satırlara yaz.
-    let tr = document.createElement("tr")
-
-    // let trNew = spendBody.appendChild(tr) // tek işlem olarak algıladı
-    tr.className = "trNew"
-
-    let tdDate = document.createElement("td")
-    tdDate.textContent = item.tarih
-    tr.appendChild(tdDate)
-
-    let tdSpend = document.createElement("td")
-    tdSpend.textContent = item.haracamaAlani
-    tr.appendChild(tdSpend)
-
-    let tdQuantity = document.createElement("td")
-    tdQuantity.textContent = item.miktar
-    tdQuantity.className = "quantityN"
-    tr.appendChild(tdQuantity)
-
-    let tdTrash = document.createElement("td")
-    tr.appendChild(tdTrash)
-    let trashI = document.createElement("i")
-    console.log(trashI); 
-    trashI.className="fa-solid";
-    trashI.className+=" fa-trash";
-    trashI.style.cursor = "pointer";
-    tdTrash.appendChild(trashI)
-    spendBody.appendChild(tr)
-
-
-    trashI.addEventListener("click", ()=>{
-        console.log("is clicked");
-        trashI.closest(".trNew").remove();
-        // calculateSpend(trNew);
-
-      
-       // Identify the clicked row and remove it from the table
-       let selectedRow = trashI.closest(".trNew");
-       selectedRow.remove();
-
-       // Identify the index of the clicked item in the harcamaListesi array
-       let selectedIndex = harcamaListesi.findIndex(item => item.tarih === tdDate.textContent);
-
-       // Remove the item from the harcamaListesi array
-       if (selectedIndex !== -1) {
-           harcamaListesi.splice(selectedIndex, 1);
-
-           // Update local storage with the modified array
-          let aaa=  localStorage.setItem("harcamaListesi", JSON.stringify(harcamaListesi));
-            console.log(aaa);
-    //    localStorage.removeItem('2')
-        // trashI.closest(".trNew").tdQuantity.textContent = "";
-    }
-
-
-        // trashI.closest(".trNew").tdQuantity.textContent = "";
-    })
-
-        
-
-        
-    })
-    calculateSpend(incomeT)
-    
-
-    
-
-}
