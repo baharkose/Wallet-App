@@ -166,17 +166,19 @@ const calculateSpend = (incomeT)=>{
     // temizleye basınca her şeyi sfırlar.
     // console.log(allQuantity);
     clearBtn.addEventListener("click", ()=>{
-    income.value = "";
-    yourSpend.textContent = ""
-    yourIncome.textContent = ""
-    spendArea.value = "";
-    date.value = ""; //
-    quantity.value = "";
-    yourSaving.textContent = ""
+    // trNew.remove();
+    income.value = "0";
+    yourSpend.textContent = "0"
+    yourIncome.textContent = "0"
+    spendArea.value = "0";
+    date.value = "0"; //
+    quantity.value = "0";
+    yourSaving.textContent = "0"
 
     // localStorage sıfırla
     // her şeyi siler
-    localstroge.clear();
+    localStorage.clear();
+    window.location.reload()
 
 });
 
