@@ -38,7 +38,8 @@ let paymentForm = 0
 addBtn.addEventListener("click",()=>{
 
 
-    // gelirleri local storage da depolamak için alan oluşturuldu.
+// gelirleri local storage da depolamak için alan oluşturuldu.
+
 localStorage.setItem("gelirler", "a")
 
 let a = income.value
@@ -71,13 +72,11 @@ let a = income.value
 
 // local stroga'da harcama formunu tutmak için verileri saklama amaçlı bir dizi tanımlandı
 
-let newList = [] 
+let harcamaListesi = [] 
+
 
 saveBtn.addEventListener("click", ()=>{
     let tr = document.createElement("tr")
-
-    let geriyeKalan = []
-
 
     let trNew = spendBody.appendChild(tr)
     trNew.className = "trNew"
@@ -117,11 +116,15 @@ saveBtn.addEventListener("click", ()=>{
 
     // <i class="fa-solid fa-trash"></i>
 
-    newList = [date.value,spendArea.value,  quantity.value]
+    harcamaListesi = [date.value,spendArea.value,  quantity.value]
 
-    geriyeKalan.push(newList)
+    //! atarken JSON stringfy alırken JSON parse
 
-    localStorage.setItem("geriyeKalan", JSON.stringfy(geriyeKalan));
+    // JSON stringfy arramış gibi veriyi gömer.
+    // harcama listesini local strorage e ekle.
+    localStorage.setItem("harcamaListesi", JSON.stringify(harcamaListesi) )
+
+   return trNew;
   
 })
 
@@ -178,4 +181,56 @@ window.onload = function() {
      goster = localStorage.getItem("gelirler")
      console.log(goster);
      yourIncome.textContent = goster;
+
+
+      // harcama listesini şimdi al ve göster
+    let goster2 = JSON.parse(localStorage.getItem("harcamaListesi"))
+    console.log(goster2);
+    
+    let tr = document.createElement("tr")
+
+    let trNew = spendBody.appendChild(tr)
+    trNew.className = "trNew"
+
+    let tdDate = document.createElement("td")
+    tdDate.textContent = goster2[0]
+    trNew.appendChild(tdDate)
+
+    let tdSpend = document.createElement("td")
+    tdSpend.textContent = goster2[1]
+    trNew.appendChild(tdSpend)
+
+    let tdQuantity = document.createElement("td")
+    tdQuantity.textContent = goster2[2]
+    tdQuantity.className = "quantityN"
+    trNew.appendChild(tdQuantity)
+
+    let tdTrash = document.createElement("td")
+    trNew.appendChild(tdTrash)
+    let trashI = document.createElement("i")
+    console.log(trashI); 
+    trashI.className="fa-solid";
+    trashI.className+=" fa-trash";
+    trashI.style.cursor = "pointer";
+    tdTrash.appendChild(trashI)
+
+    trashI.addEventListener("click", ()=>{
+        console.log("is clicked");
+        trashI.closest(".trNew").remove();
+        calculateSpend(trNew);
+        // trashI.closest(".trNew").tdQuantity.textContent = "";
+    })
+
+    yourSpend.textContent = goster2[2]
+    calculateSpend(incomeT)
+
+
+
+
+
+
+
+    // trNew.innerHTML = `<td>goster2[0]</td><td>goster2[1]</td><td>goster[2]</td><td><i class="fa-solid fa-trash></td>`
+   
 }
+
