@@ -173,7 +173,7 @@ const satirOlustur = (tarihS=tarih.value, harcamaAlaniS=harcamaAlani.value,mikta
 
 
 
-//    console.log(harcamaAlani);
+            //    console.log(harcamaAlani);
 
    // miktarları çekmek için fonksiyon çağırıldı. 
    harcamaAlaniHesapla() 
@@ -287,20 +287,20 @@ sonucGoster.addEventListener("click",()=>{
 
     console.log("is clicked");
     Swal.fire({
-    title: "Toplam Birikim",
-    text: `${newDate} yılı ${bulundugumuzAy} ayına ait toplam birikim tutarınız ${kalan.textContent} 'tl'dir. `,
-    width: 600,
-    padding: "3em",
-    color: "#716ADD",
-    background: "#fff url(/images/trees.png)",
-    backdrop: `
-            rgba(0,0,123,0.4)
-            url("/images/nyan-cat.gif")
-            left top
-            no-repeat
-                        `
-                      });
-                })
+                title: "Toplam Birikim",
+                text: `${newDate} yılı ${bulundugumuzAy} ayına ait toplam birikim tutarınız ${kalan.textContent} 'tl'dir. `,
+                width: 600,
+                padding: "3em",
+                color: "#716ADD",
+                background: "#fff url(/images/trees.png)",
+                backdrop: `
+                        rgba(0,0,123,0.4)
+                        url("/images/nyan-cat.gif")
+                        left top
+                        no-repeat
+                                    `
+                                });
+ })
 
 
 
