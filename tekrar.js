@@ -10,6 +10,8 @@ const miktar = document.querySelector("#miktar")
 
 const ekleBtn = document.querySelector("#ekle-btn")
 const kaydet = document.querySelector("#kaydet")
+const temizleBtn = document.querySelector("#temizle-btn")
+const sonucGoster = document.querySelector(".sonuc-goster")
 
 
 //* TEXTCONTENTLER
@@ -26,35 +28,34 @@ console.log(harcamaBody);
 
 
 //* Hesap İşlemleri
-
 let miktarToplam = 0;
 
+//* LOCAL TANIMLAMA
+localStorage.setItem("geliriniz",0)
 
 
 
 
-
-//?     **********  TIKLAMA OLAYLARI  **********
+//?     **********  TIKLAMA OLAYLARI  **********   ////
 
 
 //* EKLE BUTONUNA TIKLANDIĞINDA
 
 ekleBtn.addEventListener("click", (e)=>{
 
+    e.preventDefault();
+
+        // formun varsayılan ayarlarına dönmesini engeller.
 
     //* LOCALSTORAGE İŞLEMLERİ
 
-        localStorage.setItem("geliriniz",gelirInput.value);
-
-
-        // formun varsayılan ayarlarına dönmesini engeller.
-        e.preventDefault();
 
         let gelirValue = gelirInput.value
         if(isNaN(gelirValue)){
             alert("lütfen bir sayı giriniz")
         }
         else{
+            localStorage.setItem("geliriniz",gelirInput.value);
             geliriniz.textContent = gelirValue;
         }
 });
@@ -63,39 +64,45 @@ ekleBtn.addEventListener("click", (e)=>{
 //* KAYDETE TIKLANDIĞINDA
 
 kaydet.addEventListener("click", (e)=>{
+
         e.preventDefault()
         satirOlustur()
         harcamaAlaniHesapla()
         sil()
 
 
+
         // localStorage.set("harcamaBody",)
 })
 
 
-//* SİLME FONKSYİONU
+//* TEMİZLEYE TIKLANDIĞINDA
 
-function sil() {
-    harcamaBody.addEventListener("click", (e)=>{
+temizleBtn.addEventListener("click", ()=>{
 
-        console.log(e.target);
-    
-        //* * * * * * *SİLME İŞLEMİ* * * * * *
-    
-        if(e.target.classList.contains("fa-trash")){
-
-            // let mktr = e.target.closest(".tdMiktarC");
-             e.target.closest(".yeniSatir").remove();
-             harcamaAlaniHesapla()
- 
-        }
+    console.log("is clicked");
   
-    })
+    geliriniz.textContent = 0;
+    gideriniz.textContent = 0;
+    kalan.textContent = 0;
+    localStorage.clear();
+    window.location.reload()
+   
 
-    
-}
+})
 
 
+
+//?   *********** WINDOW ***********
+
+// WINDOW ONLOAD
+
+window.onload = function() {
+    let gelirStorage = localStorage.getItem("geliriniz")
+    console.log(gelirStorage);
+    geliriniz.textContent = gelirStorage;
+    yourSpendLocal()
+};
 
 
 
@@ -104,9 +111,11 @@ function sil() {
 
 //* SATIR OLUŞTURMA FONKSİYONU
 
-const satirOlustur = ()=>{
+let spendList = [];
 
-   
+const satirOlustur = (tarihS=tarih.value, harcamaAlaniS=harcamaAlani.value,miktarS=miktar.value)=>{
+
+           
             // satır oluştur
             let tr = document.createElement("tr")
             harcamaBody.appendChild(tr)
@@ -117,20 +126,20 @@ const satirOlustur = ()=>{
             // sütunları oluştur
             let tdTarih = document.createElement("td")
             tr.appendChild(tdTarih)
-            tdTarih.textContent = tarih.value;
-            console.log(tarih.value);
+            tdTarih.textContent = tarihS;
+            console.log(tarih);
             
 
             let tdHarcamaAlani = document.createElement("td")
             tr.appendChild(tdHarcamaAlani)
-            tdHarcamaAlani.textContent = harcamaAlani.value
+            tdHarcamaAlani.textContent = harcamaAlaniS
             console.log(harcamaAlani.value);
 
 
             let tdMiktar = document.createElement("td")
             tr.appendChild(tdMiktar)
             tdMiktar.setAttribute("class","tdMiktarC")
-            tdMiktar.textContent = miktar.value
+            tdMiktar.textContent = miktarS
 
             // Bu da hesaplar...
             // gider += Number(miktar.value)
@@ -138,27 +147,37 @@ const satirOlustur = ()=>{
             // gideriniz.textContent = gider;
          
     
-            let tdİslem = document.createElement("td")
-            tr.appendChild(tdİslem)
+            let tdIslem = document.createElement("td")
+            tr.appendChild(tdIslem)
             let copI = document.createElement("i")
 
             // birden fazla class ekleme
             copI.setAttribute('class', 'fa-solid fa-trash')
             copI.setAttribute('style', 'font-size:1.5rem; color:red')
             // copI.style.color = "red";
-            tdİslem.appendChild(copI)
+            tdIslem.appendChild(copI)
             copI.style.cursor= "pointer"
 
 
+            // LOCAL STORAGE ASSIGN STEP
+            let lineObject = {
+                tarih: tarih.value,
+                harcamaAlani: harcamaAlani.value,
+                miktar: miktar.value
+            }
+
+            spendList.push(lineObject)
+            
+            localStorage.setItem("yourSpend", JSON.stringify(spendList)) || []
+            // return spendList;
 
 
-          
-   
 
 //    console.log(harcamaAlani);
 
    // miktarları çekmek için fonksiyon çağırıldı. 
    harcamaAlaniHesapla() 
+   return;
    
 }
 
@@ -196,11 +215,95 @@ const harcamaAlaniHesapla = () =>{
 }
 
 
-window.onload = function() {
-            let gelirStorage = localStorage.getItem("geliriniz")
-            console.log(gelirStorage);
-            geliriniz.textContent = gelirStorage
-};
+//* SİLME FONKSYİONU
+
+function sil() {
+    harcamaBody.addEventListener("click", (e)=>{
+
+        console.log(e.target);
+    
+        //* * * * * * *SİLME İŞLEMİ* * * * * *
+    
+        if(e.target.classList.contains("fa-trash")){
+
+            // let mktr = e.target.closest(".tdMiktarC");
+             e.target.closest(".yeniSatir").remove();
+             harcamaAlaniHesapla()
+      
+        }
+  
+    
+    })
+
+
+    
+}
+
+
+
+
+//* LOCAL FONKSİYONU
+
+const yourSpendLocal = () =>{
+    
+    
+    spendList = JSON.parse(localStorage.getItem("yourSpend", spendList)) || [];
+    console.log(spendList);
+
+    if(spendList){
+        spendList.forEach(item =>{
+
+            if(item.tarih){
+               satirOlustur(item.tarih, item.harcamaAlani, item.miktar)
+                console.log(satirOlustur); 
+            }
+            
+        })
+    }
+
+   harcamaAlaniHesapla()
+   sil()
+   
+}
+
+
+
+//* GÖSTERE TIKLANDIĞINDA
+
+sonucGoster.addEventListener("click",()=>{
+
+     // bugün itibariyle birikimi yazdır. 
+     let newDate = new Date().getFullYear()
+     console.log(newDate);
+
+     let newDate2 = new Date();
+     // ayı çek
+     let ayIsimleri = [
+         "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran",
+         "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"
+       ];
+
+       let bulundugumuzAy = ayIsimleri[newDate2.getMonth()+1];
+
+    console.log("is clicked");
+    Swal.fire({
+    title: "Toplam Birikim",
+    text: `${newDate} yılı ${bulundugumuzAy} ayına ait toplam birikim tutarınız ${kalan.textContent} 'tl'dir. `,
+    width: 600,
+    padding: "3em",
+    color: "#716ADD",
+    background: "#fff url(/images/trees.png)",
+    backdrop: `
+            rgba(0,0,123,0.4)
+            url("/images/nyan-cat.gif")
+            left top
+            no-repeat
+                        `
+                      });
+                })
+
+
+
 
     
 
