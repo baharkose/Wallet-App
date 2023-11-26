@@ -31,7 +31,7 @@ console.log(harcamaBody);
 let miktarToplam = 0;
 
 //* LOCAL TANIMLAMA
-localStorage.setItem("geliriniz",0)
+// localStorage.setItem("geliriniz",0)
 
 
 
